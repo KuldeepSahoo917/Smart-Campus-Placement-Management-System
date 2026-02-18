@@ -1,3 +1,5 @@
+
+
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import Navbar from "../components/Navbar";
@@ -22,7 +24,15 @@ const MyApplication = () => {
         }
 
         const student = JSON.parse(studentData);
-        const studentId = student.id; // ✅ correct ID
+
+        // ✅ Handle both `id` and `_id`
+        const studentId = student.id || student._id;
+
+        if (!studentId) {
+          setError("Invalid student ID");
+          setLoading(false);
+          return;
+        }
 
         const res = await axios.get(
           `${BACKEND_URL}/api/apply/student/${studentId}`
@@ -42,7 +52,7 @@ const MyApplication = () => {
     };
 
     fetchApplications();
-  }, []);
+  }, [BACKEND_URL]);
 
   return (
     <>

@@ -1,19 +1,20 @@
 import bcrypt from "bcryptjs";
 import Student from "../model/studentModel.js";
+import { sendEmail } from "../service/emailService.js";
+
+
 
 /* ================= CREATE STUDENT ================= */
 export const createStudent = async (req, res) => {
   try {
     const { name, email, password, rollNo, department } = req.body;
 
-    // Validation: required fields only
     if (!name || !email || !password || !rollNo || !department) {
       return res.status(400).json({
         message: "Name, Email, Password, Roll No, and Department are required",
       });
     }
 
-    // Check for existing student (email or rollNo)
     const existingStudent = await Student.findOne({
       $or: [{ email }, { rollNo }],
     });
@@ -24,17 +25,18 @@ export const createStudent = async (req, res) => {
       });
     }
 
+    // Save original password for email
+    const plainPassword = password;
+
     // Hash password
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    // Create student
     const student = await Student.create({
       name,
       email,
       password: hashedPassword,
       rollNo,
       department,
-      // Optional fields left empty
       year: 1,
       cgpa: 0,
       skills: [],
@@ -42,15 +44,54 @@ export const createStudent = async (req, res) => {
       placed: false,
     });
 
+    /* ===== SEND LOGIN EMAIL ===== */
+    await sendEmail({
+      to: email,
+      subject: "Placement Portal Registration Details",
+      message: `
+        <div style="font-family: Arial, sans-serif; line-height: 1.6;">
+          <h2 style="color:#2c3e50;">Registration Successful</h2>
+
+          <p>Dear ${name},</p>
+
+          <p>
+            You have been successfully registered on the Placement Portal.
+            Below are your login credentials:
+          </p>
+
+          <p>
+            <strong>Registration Number:</strong> ${rollNo} <br/>
+            <strong>Password:</strong> ${plainPassword}
+          </p>
+
+          <p>
+            You may now log in using the above credentials and complete your profile.
+            For security reasons. 
+          </p>
+
+          <br/>
+
+          <p>Yours sincerely,</p>
+          <p><strong>Placement Cell</strong></p>
+        </div>
+      `,
+    });
+
     res.status(201).json({
       success: true,
-      message: "Student added successfully",
+      message: "Student added successfully and login email sent",
       student,
     });
+
   } catch (error) {
+    console.error("Create Student Error:", error.message);
     res.status(500).json({ success: false, message: error.message });
   }
 };
+
+
+
+
 
 /* ================= GET ALL STUDENTS ================= */
 export const getAllStudents = async (req, res) => {

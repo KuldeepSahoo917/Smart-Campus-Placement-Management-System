@@ -109,7 +109,7 @@ const Students = () => {
                 <tr>
                   <th className="px-6 py-3 text-left font-semibold">Name</th>
                   <th className="px-6 py-3 text-left font-semibold">Email</th>
-                  <th className="px-6 py-3 text-left font-semibold">Roll No</th>
+                  <th className="px-6 py-3 text-left font-semibold">Registration No</th>
                   <th className="px-6 py-3 text-left font-semibold">Department</th>
                   <th className="px-6 py-3 text-left font-semibold">Actions</th>
                 </tr>
@@ -156,7 +156,7 @@ const Students = () => {
                   </span>
                 </div>
                 <p className="text-sm text-gray-600">{s.email}</p>
-                <p className="text-sm text-gray-600">Roll No: {s.rollNo}</p>
+                <p className="text-sm text-gray-600">Registration No: {s.rollNo}</p>
                 <div className="flex justify-end gap-3 mt-2">
                   <button
                     onClick={() => handleEdit(s)}
@@ -206,7 +206,7 @@ const Students = () => {
                 name="rollNo"
                 value={formData.rollNo}
                 onChange={handleChange}
-                placeholder="Roll Number"
+                placeholder="Registration Number"
                 required
                 className="w-full border px-3 py-2 rounded"
               />

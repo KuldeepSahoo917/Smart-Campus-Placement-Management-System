@@ -32,13 +32,13 @@ const Home = () => {
           <div className="flex flex-col sm:flex-row justify-center gap-4">
             <button
               onClick={() => navigate("/dashboard")}
-              className="bg-white text-blue-600 px-6 py-3 rounded-md text-sm sm:text-base font-medium hover:bg-gray-100 transition"
+              className="bg-white text-blue-600 cursor-pointer px-6 py-3 rounded-md text-sm sm:text-base font-medium hover:bg-gray-100 transition"
             >
               Go to Dashboard
             </button>
             <button
               onClick={() => navigate("/students")}
-              className="border border-white text-white px-6 py-3 rounded-md text-sm sm:text-base font-medium hover:bg-white hover:text-blue-600 transition"
+              className="border border-white cursor-pointer text-white px-6 py-3 rounded-md text-sm sm:text-base font-medium hover:bg-white hover:text-blue-600 transition"
             >
               Manage Students
             </button>

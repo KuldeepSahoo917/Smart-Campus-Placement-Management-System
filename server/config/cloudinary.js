@@ -10,6 +10,7 @@ const connectCloudinary = () => {
     api_key: process.env.CLOUDINARY_API_KEY,
     api_secret: process.env.CLOUDINARY_API_SECRET,
     secure: true,
+    timeout: 60000, // 60 seconds timeout (prevents request timeout)
   });
   console.log("✅ Cloudinary connected");
 };

@@ -43,7 +43,7 @@ const AdminLogin = () => {
       localStorage.setItem("adminEmail", response.data.admin.email);
 
       toast.success(response.data.message || "Success 🎉");
-      navigate("/dashboard");
+      navigate("/home");
     } catch (error) {
       toast.error(error.response?.data?.message || "Something went wrong ❌");
     } finally {
