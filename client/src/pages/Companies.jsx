@@ -149,7 +149,12 @@ const Companies = () => {
 
           {/* COMPANIES GRID */}
           {loading ? (
-            <p className="text-center py-6">Loading...</p>
+           <div className="flex flex-col justify-center items-center h-40 gap-3">
+            <div className="w-12 h-12 border-4 border-blue-500 border-dashed rounded-full animate-spin"></div>
+            <p className="text-gray-500 text-sm animate-pulse">
+              Loading applications...
+            </p>
+          </div>
           ) : companies.length === 0 ? (
             <p className="text-center py-6 text-gray-500">
               No companies available yet.
