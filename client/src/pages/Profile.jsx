@@ -126,7 +126,7 @@ const Profile = () => {
           {/* BASIC INFO */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-10">
             <Input label="Email" value={student.email} disabled />
-            <Input label="Roll No" value={student.rollNo} disabled />
+            <Input label="Registration No" value={student.rollNo} disabled />
             <Input
               label="CGPA"
               value={cgpa}
