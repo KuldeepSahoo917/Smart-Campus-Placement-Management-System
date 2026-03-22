@@ -1,10 +1,9 @@
 
-
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { toast } from "react-toastify";
-import { Pencil, X, Upload } from "lucide-react";
+import { Pencil, X } from "lucide-react";
 import Navbar from "../components/Navbar";
 
 const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
@@ -19,11 +18,7 @@ const Profile = () => {
   const [year, setYear] = useState("");
   const [skills, setSkills] = useState([]);
   const [newSkill, setNewSkill] = useState("");
-  const [resume, setResume] = useState(null);
 
-  const [showResume, setShowResume] = useState(false);
-
-  /* ================= LOAD STUDENT ================= */
   useEffect(() => {
     const storedStudent = localStorage.getItem("student");
     const studentId = localStorage.getItem("studentId");
@@ -40,20 +35,17 @@ const Profile = () => {
     setSkills(parsed.skills || []);
   }, [navigate]);
 
-  /* ================= PROFILE COMPLETION ================= */
   const profileCompletion = () => {
-    let total = 4;
+    let total = 3;
     let completed = 0;
 
     if (cgpa) completed++;
     if (year) completed++;
     if (skills.length > 0) completed++;
-    if (student?.resume) completed++;
 
     return Math.floor((completed / total) * 100);
   };
 
-  /* ================= SKILLS ================= */
   const addSkill = () => {
     if (!newSkill.trim()) return;
 
@@ -70,7 +62,6 @@ const Profile = () => {
     setSkills(skills.filter((skill) => skill !== skillToRemove));
   };
 
-  /* ================= UPDATE PROFILE ================= */
   const handleUpdate = async () => {
     try {
       const studentId = localStorage.getItem("studentId");
@@ -79,10 +70,6 @@ const Profile = () => {
       form.append("cgpa", cgpa);
       form.append("year", year);
       form.append("skills", JSON.stringify(skills));
-
-      if (resume) {
-        form.append("resume", resume);
-      }
 
       const res = await axios.put(
         `${BACKEND_URL}/api/student/update/${studentId}`,
@@ -95,7 +82,6 @@ const Profile = () => {
       localStorage.setItem("student", JSON.stringify(updatedStudent));
       setStudent(updatedStudent);
       setEdit(false);
-      setResume(null);
 
       toast.success("Profile updated successfully 🚀");
     } catch (error) {
@@ -136,6 +122,7 @@ const Profile = () => {
             </div>
           </div>
 
+         
           {/* BASIC INFO */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-10">
             <Input label="Email" value={student.email} disabled />
@@ -197,35 +184,6 @@ const Profile = () => {
             )}
           </div>
 
-          {/* RESUME */}
-          <div className="mb-10">
-            <h2 className="text-2xl font-semibold mb-4 text-gray-800">
-              Resume
-            </h2>
-
-            {!edit && student.resume && (
-              <button
-                onClick={() => setShowResume(true)}
-                className="text-indigo-600 font-medium cursor-pointer hover:underline"
-              >
-                View Uploaded Resume
-              </button>
-            )}
-
-            {edit && (
-              <label className="flex items-center gap-3 px-5 py-3 border-2 border-dashed rounded-xl cursor-pointer hover:bg-indigo-50">
-                <Upload size={18} />
-                Upload PDF Resume
-                <input
-                  type="file"
-                  accept=".pdf"
-                  hidden
-                  onChange={(e) => setResume(e.target.files[0])}
-                />
-              </label>
-            )}
-          </div>
-
           {edit && (
             <div className="text-right">
               <button
@@ -238,58 +196,6 @@ const Profile = () => {
           )}
         </div>
       </div>
-
-      {/* ================= PROFESSIONAL RESUME MODAL ================= */}
-      {showResume && (
-        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-
-          <div className="relative w-full max-w-6xl h-[85vh] bg-white rounded-3xl shadow-2xl overflow-hidden flex flex-col">
-
-            {/* Header */}
-            <div className="flex items-center justify-between px-6 py-4 border-b bg-gradient-to-r from-indigo-500 to-purple-600 text-white">
-              <h2 className="text-lg md:text-xl font-semibold">
-                My Resume
-              </h2>
-
-              <button
-                onClick={() => setShowResume(false)}
-                className="bg-white/20 cursor-pointer hover:bg-white/30 p-2 rounded-full transition"
-              >
-                ✕
-              </button>
-            </div>
-
-            {/* PDF Viewer */}
-            <div className="flex-1 bg-gray-100">
-              <iframe
-                src={student.resume}
-                title="Resume"
-                className="w-full h-full"
-              />
-            </div>
-
-            {/* Footer */}
-            <div className="px-6 py-4 border-t flex justify-end gap-4 bg-white">
-              <a
-                href={student.resume}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="px-5 py-2 bg-indigo-600 text-white cursor-pointer rounded-full hover:bg-indigo-700 transition"
-              >
-                Open in New Tab
-              </a>
-
-              <button
-                onClick={() => setShowResume(false)}
-                className="px-5 py-2 bg-gray-200 cursor-pointer rounded-full hover:bg-gray-300 transition"
-              >
-                Close
-              </button>
-            </div>
-
-          </div>
-        </div>
-      )}
     </>
   );
 };
