@@ -145,7 +145,12 @@ const Students = () => {
         {/* Mobile Cards */}
         <div className="sm:hidden space-y-4">
           {loading ? (
-            <p className="text-center">Loading...</p>
+          <div className="flex flex-col justify-center items-center h-40 gap-3">
+              <div className="w-12 h-12 border-4 border-blue-500 border-dashed rounded-full animate-spin"></div>
+              <p className="text-gray-500 text-sm animate-pulse">
+                Loading applications...
+              </p>
+            </div>
           ) : (
             students.map((s) => (
               <div key={s._id} className="bg-white rounded-xl shadow p-4 space-y-2">
