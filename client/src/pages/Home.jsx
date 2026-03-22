@@ -27,13 +27,6 @@ const Home = () => {
             >
               Student Login
             </button>
-
-            <button
-              onClick={() => navigate("/login")}
-              className="px-6 py-3 border cursor-pointer border-white text-white font-semibold rounded-md hover:bg-white hover:text-blue-600 transition"
-            >
-              Register
-            </button>
           </div>
         </div>
       </section>
